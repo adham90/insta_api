@@ -19,7 +19,7 @@ To get rolling, start by copying config/database.yml.copy into config/database.y
 
 And update the database configuration settings according to your environment, then bin/setup
 
-> cd insta_api/
+> cd insta_api/<br>
 > bin/setup
 
 After setup finish run the server.

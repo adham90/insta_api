@@ -1,6 +1,3 @@
-InstaAPI
-================
-
 # Setup the environment
 
 This application requires:

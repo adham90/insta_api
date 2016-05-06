@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe BugsController, type: :controller do
+  let(:bug) { create(:bug) }
+
   describe 'GET #index' do
     it 'render all bugs' do
       bug = create(:bug)
@@ -25,28 +27,49 @@ RSpec.describe BugsController, type: :controller do
 
   describe 'GET #show' do
     context 'when bug found' do
+
+      before(:each) do
+        request.headers['token'] = bug.application_token
+      end
+
       it 'render bug by number' do
-        bug = create(:bug, application_token: 1)
         get :show, number: bug.number
         expect(assigns(:bug)).to eq(bug)
       end
 
       it 'render status code 200 ok' do
-        bug = create(:bug, application_token: 1)
         get :show, number: bug.number
         expect(response).to have_http_status(:ok)
       end
     end
 
     context 'when bug not found' do
-      it 'render status code 404 not found' do
-        get :show, number: 'notfoundnumber'
-        expect(response).to have_http_status(404)
+      context 'with invalid bug number' do
+        before(:each) do
+          request.headers['token'] = bug.application_token
+        end
+
+        it 'render status code 404 not found' do
+          get :show, number: 'notfoundnumber'
+          expect(response).to have_http_status(404)
+        end
+
+        it 'render bug not found error msg' do
+          get :show, number: 'notfoundnumber'
+          expect(JSON.parse(response.body)['error']).to eq('bug not found')
+        end
       end
 
-      it 'render bug not found error msg' do
-        get :show, number: 'notfoundnumber'
-        expect(JSON.parse(response.body)['error']).to eq('bug not found')
+      context 'with invalid token' do
+        it 'render status code 404 not found' do
+          get :show, number: bug.number
+          expect(response).to have_http_status(404)
+        end
+
+        it 'render bug not found error msg' do
+          get :show, number: bug.number
+          expect(JSON.parse(response.body)['error']).to eq('bug not found')
+        end
       end
     end
   end
@@ -69,7 +92,6 @@ RSpec.describe BugsController, type: :controller do
         expect(response).to match_response_schema('application_count')
       end
     end
-
 
     context 'when application not found' do
       it 'render 404 status code wiht msg not found' do
@@ -113,6 +135,12 @@ RSpec.describe BugsController, type: :controller do
         expect do
           post :create, bug: FactoryGirl.attributes_for(:bug, application_token: '')
         end.to_not change(Bug, :count)
+      end
+
+      it 'render key :error with error massages' do
+        post :create, bug: FactoryGirl.attributes_for(:bug, application_token: '')
+        parsed_response = JSON.parse(response.body)
+        expect(parsed_response.keys).to contain_exactly("error")
       end
     end
   end

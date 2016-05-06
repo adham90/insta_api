@@ -3,6 +3,8 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.6'
 gem 'rails-api'
 gem 'mysql2'
+gem 'auto_increment'
+gem 'active_model_serializers', '~> 0.9.5'
 
 group :development, :test do
   gem 'factory_girl_rails'
@@ -24,4 +26,5 @@ end
 group :test do
   gem 'database_cleaner'
   gem 'shoulda-matchers', '~> 3.1'
+  gem 'json_matchers'
 end

@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :state do
-    os 'osx'
+    memory 100
+    storage 100
     bug
   end
 end

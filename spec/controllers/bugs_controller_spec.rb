@@ -70,6 +70,7 @@ RSpec.describe BugsController, type: :controller do
       end
     end
 
+
     context 'when application not found' do
       it 'render 404 status code wiht msg not found' do
         get :count

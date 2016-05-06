@@ -13,7 +13,7 @@ class BugsController < ApplicationController
 
   def count
     token = request.headers['token']
-    bugs_count = Bug.where(application_token: token).count if token
+    bugs_count = Bug.cached_count_for(token) if token
 
     if bugs_count
       render json: { application_token: token, count: bugs_count }.as_json

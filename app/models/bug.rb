@@ -14,4 +14,16 @@ class Bug < ActiveRecord::Base
                           initial: '1',
                           force: true,
                           lock: false
+
+  after_commit :reset_count
+
+  def self.cached_count_for(token)
+    Rails.cache.fetch(['bug_count', token]) { Bug.where(application_token: token).count }
+  end
+
+  private
+
+  def reset_count
+    CountBugsJob.perform_async(application_token)
+  end
 end

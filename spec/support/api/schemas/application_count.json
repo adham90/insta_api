@@ -1,0 +1,8 @@
+{
+  "type": "object",
+  "properties": {
+    "application_token": { "type": "string" },
+    "count":             { "type": "integer" }
+  },
+ "required": ["application_token", "count"]
+}

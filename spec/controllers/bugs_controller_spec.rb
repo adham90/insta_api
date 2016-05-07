@@ -101,7 +101,7 @@ RSpec.describe BugsController, type: :controller do
 
       it 'render application not found error msg' do
         get :count
-        expect(JSON.parse(response.body)['error']).to eq('application not found')
+        expect(JSON.parse(response.body)['error']).to eq('record not found')
       end
     end
   end

@@ -13,7 +13,6 @@ class BugsController < ApplicationController
 
   # bugs/count with token header
   def count
-    token = request.headers['token']
     bugs_count = Bug.cached_count_for(token) if token
 
     if bugs_count
@@ -21,24 +20,24 @@ class BugsController < ApplicationController
         application_token: token, count: bugs_count
       }.as_json, status: :ok
     else
-      render json: { error: 'application not found' }, status: 404
+      raise ActiveRecord::RecordNotFound
     end
   end
 
   def create
-    begin
-      @bug = Bug.create!(bug_params)
-    rescue Exception => e
-      raise e
-    end
+    @bug = Bug.create!(bug_params)
+
     render json: { number: @bug.number }, status: :created, location: @bug
   end
 
   private
 
   def set_bug
-    token = request.headers['token']
     @bug = Bug.find_by!(number: params[:number], application_token: token)
+  end
+
+  def token
+    request.headers['token']
   end
 
   def bug_params

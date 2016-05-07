@@ -17,36 +17,21 @@ class BugsController < ApplicationController
     bugs_count = Bug.cached_count_for(token) if token
 
     if bugs_count
-      render json: { application_token: token, count: bugs_count }.as_json
+      render json: {
+        application_token: token, count: bugs_count
+      }.as_json, status: :ok
     else
       render json: { error: 'application not found' }, status: 404
     end
   end
 
   def create
-    @bug = Bug.new(bug_params)
-
-    if @bug.save
-      render json: { number: @bug.number }, status: :created, location: @bug
-    else
-      render json: { error: @bug.errors.full_messages }, status: :unprocessable_entity
+    begin
+      @bug = Bug.create!(bug_params)
+    rescue Exception => e
+      raise e
     end
-  end
-
-  def update
-    @bug = Bug.find(params[:id])
-
-    if @bug.update(bug_params)
-      head :no_content
-    else
-      render json: { error: @bug.errors.full_messages }, status: :unprocessable_entity
-    end
-  end
-
-  def destroy
-    @bug.destroy
-
-    head :no_content
+    render json: { number: @bug.number }, status: :created, location: @bug
   end
 
   private
@@ -54,8 +39,7 @@ class BugsController < ApplicationController
   def set_bug
     token = request.headers['token']
     @bug = Bug.find_by(number: params[:number], application_token: token)
-
-    render json: { error: 'bug not found' }, status: 404 unless @bug
+    raise ActiveRecord::RecordNotFound, 'bug not found' unless @bug
   end
 
   def bug_params

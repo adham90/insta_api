@@ -21,4 +21,14 @@ RSpec.describe Bug, type: :model do
       expect(app_b2_bug.number).to eql('2')
     end
   end
+
+  describe '#status' do
+    let(:status) { [:new_bug, 'in-progress', :closed] }
+
+    it 'has the right index' do
+      status.each_with_index do |item, index|
+        expect(Bug.statuses[item]).to eq index
+      end
+    end
+  end
 end

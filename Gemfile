@@ -16,13 +16,11 @@ group :development, :test do
   gem 'faker'
   gem 'rspec-rails'
   gem 'byebug'
-  gem 'dotenv-rails'
 end
 
 group :development do
   gem 'rubocop', require: false
   gem 'spring'
-  gem 'better_errors'
   gem 'guard-bundler'
   gem 'guard-rails'
   gem 'guard-rspec'

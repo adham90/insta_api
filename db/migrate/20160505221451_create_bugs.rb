@@ -1,8 +1,8 @@
 class CreateBugs < ActiveRecord::Migration
   def change
     create_table :bugs do |t|
-      t.string :application_token
-      t.string :number
+      t.string :application_token, index: true
+      t.string :number, index: true
       t.integer :status, default: 0
       t.integer :priority, default: 0
 

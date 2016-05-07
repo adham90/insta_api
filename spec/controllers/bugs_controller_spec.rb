@@ -56,7 +56,7 @@ RSpec.describe BugsController, type: :controller do
 
         it 'render bug not found error msg' do
           get :show, number: 'notfoundnumber'
-          expect(JSON.parse(response.body)['error']).to eq('bug not found')
+          expect(JSON.parse(response.body)['error']).to eq('record not found')
         end
       end
 
@@ -68,7 +68,7 @@ RSpec.describe BugsController, type: :controller do
 
         it 'render bug not found error msg' do
           get :show, number: bug.number
-          expect(JSON.parse(response.body)['error']).to eq('bug not found')
+          expect(JSON.parse(response.body)['error']).to eq('record not found')
         end
       end
     end

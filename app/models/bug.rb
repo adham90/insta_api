@@ -1,4 +1,6 @@
 class Bug < ActiveRecord::Base
+  CACHE_NAME = self.class.name
+
   has_many :states, dependent: :destroy
   accepts_nested_attributes_for :states, allow_destroy: true
 
@@ -6,10 +8,9 @@ class Bug < ActiveRecord::Base
   validates_uniqueness_of :number, scope: :application_token,
                                    case_sensitive: false
 
-  enum status: [:new_bug, 'in-progress', :closed]
+  enum status: { new_bug: 0, 'in-progress' => 1, closed: 2 }
   enum priority: { minor: 0, major: 1, critical: 2 }
 
-  # for documentation: https://github.com/felipediesel/auto_increment
   auto_increment :number, scope: [:application_token],
                           initial: '1',
                           force: true,
@@ -18,7 +19,12 @@ class Bug < ActiveRecord::Base
   after_commit :reset_count
 
   def self.cached_count_for(token)
-    Rails.cache.fetch(['bug_count', token]) { Bug.where(application_token: token).count }
+    Rails.cache.fetch([CACHE_NAME, token]) { Bug.where(application_token: token).count }
+  end
+
+  def self.expire_cached_count(token)
+    Rails.cache.delete([CACHE_NAME, token])
+    Rails.cache.fetch([CACHE_NAME, token]) { Bug.where(application_token: token).count }
   end
 
   private

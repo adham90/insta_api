@@ -38,8 +38,7 @@ class BugsController < ApplicationController
 
   def set_bug
     token = request.headers['token']
-    @bug = Bug.find_by(number: params[:number], application_token: token)
-    raise ActiveRecord::RecordNotFound, 'bug not found' unless @bug
+    @bug = Bug.find_by!(number: params[:number], application_token: token)
   end
 
   def bug_params

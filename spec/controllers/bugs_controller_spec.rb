@@ -5,7 +5,7 @@ RSpec.describe BugsController, type: :controller do
 
   describe 'GET #index' do
     it 'render all bugs' do
-      bug = create(:bug)
+      bug
       get :index
       expect(assigns(:bugs)).to eq([bug])
     end

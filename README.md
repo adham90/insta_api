@@ -16,7 +16,7 @@ If you're using RVM then you might want to run
 
 To get rolling, start by copying config/database.yml.example into config/database.yml
 
-> $ cp config/database.yml.copy config/database.yml
+> $ cp config/database.yml.example config/database.yml
 
 And update the database configuration settings according to your environment, then bin/setup
 

@@ -25,9 +25,19 @@ RSpec.describe Bug, type: :model do
   describe '#status' do
     let(:status) { [:new_bug, 'in-progress', :closed] }
 
-    it 'has the right index' do
+    it 'has the right status' do
       status.each_with_index do |item, index|
         expect(Bug.statuses[item]).to eq index
+      end
+    end
+  end
+
+  describe '#priority' do
+    let(:priority) { [:minor, :major, :critical] }
+
+    it 'has the right priorities' do
+      priority.each_with_index do |item, index|
+        expect(Bug.priorities[item]).to eq index
       end
     end
   end

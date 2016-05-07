@@ -14,7 +14,7 @@ If you're using RVM then you might want to run
 
 ### Installation
 
-To get rolling, start by copying config/database.yml.copy into config/database.yml
+To get rolling, start by copying config/database.yml.example into config/database.yml
 
 > $ cp config/database.yml.copy config/database.yml
 

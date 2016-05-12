@@ -8,6 +8,6 @@ class CreateBugs < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-    add_index :bugs, [:application_token, :number]
+    add_index :bugs, [:application_token, :number], unique: true
   end
 end

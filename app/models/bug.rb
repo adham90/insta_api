@@ -16,15 +16,15 @@ class Bug < ActiveRecord::Base
                           force: true,
                           lock: false
 
-  after_commit :reset_count
+  after_create :reset_count
 
   def self.cached_count_for(token)
     Rails.cache.fetch([CACHE_NAME, token]) { Bug.where(application_token: token).count }
   end
 
   def self.expire_cached_count(token)
-    Rails.cache.delete([CACHE_NAME, token])
-    Rails.cache.fetch([CACHE_NAME, token]) { Bug.where(application_token: token).count }
+    count = Rails.cache.fetch([CACHE_NAME, token])
+    Rails.cache.write([CACHE_NAME, token], count + 1)
   end
 
   private

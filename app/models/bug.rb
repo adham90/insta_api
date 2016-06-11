@@ -27,6 +27,10 @@ class Bug < ActiveRecord::Base
     Rails.cache.fetch([CACHE_NAME, token]) { Bug.where(application_token: token).count }
   end
 
+  def self.create_async bug
+    Bug.create!(bug)
+  end
+
   private
 
   def reset_count
